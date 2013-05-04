@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- This code is COPYRIGHT (C) FRED TEUMER 2013. -->
+<!-- Research and information accredited to Greg Aloupis -->
+
+<html>
+
+<head>
+	<title>The Swimmer Problem</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--<link rel="stylesheet" href="css/style.css" media="screen"/>-->
+	<link rel="stylesheet" href="css/bootstrap.min.css" media="screen"/>
+</head>
+
+<body onload="init()">
+
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/kinetic-v4.4.3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jcanvas.min.js"></script>
+<script src="js/init.js"></script>
+
+
+<div id="content" class="row-fluid">
+	<div id="header" class="span12">The Swimmer Problem</div>
+	<div id="canvas" class="span12">
+		<canvas id="canvas" height="400" width="480">
+		If you can read this, you need to get a better browser. You can't even use HTML5 Canvas!
+		</canvas>
+	</div>
+	<div id="info" class="span12">INFO</div>
+	<div id="numswimmers" class="row-fluid">
+		<div class="span3" id="swim1">
+			<input type="button" value="One Swimmer" id="swim1button" disabled />
+		</div>
+		<div class="span3" id="swim2">
+			<input type="button" value="Two Swimmers" id="swim2button" disabled />
+		</div>
+		<div class="span3" id="swim3">
+			<input type="button" value="Three Swimmers" id="swim3button" />
+		</div>
+		<div class="span3" id="swimk">
+			<input type="button" value="k Swimmers" id="swimkbutton" disabled />
+		</div>
+	</div>
+</div>
+
+</body>
+
+</html>
