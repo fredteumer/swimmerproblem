@@ -27,26 +27,26 @@
 	</div>
 	<div id="info" class="span12">
 		<p>You are the center point c in the circle C above, lost a unit distance out at sea. </p>
-		<p>The beach is the line l, but there is a heavy fog, you don't know which way the beach is!</p>
+		<p>The beach is the line l, but there is a heavy fog -- you don't know which way the beach is!</p>
 		<p>You need to get to shore with the least amount of swimming as possible!</p>
 		<p>To begin, select how many swimmers are lost at sea.</p>
 	</div>
 	<div id="numswimmers" class="row-fluid">
 		<div class="span3" id="swim1">
-			<input type="button" value="One Swimmer" id="swim1button" 
-				onclick="setNumberOfSwimmers(2)" disabled />
+			<input type="button" value="1 Swimmer" id="swim1button" 
+				onclick="setNumberOfSwimmers(1)" disabled />
 		</div>
 		<div class="span3" id="swim2">
-			<input type="button" value="Two Swimmers" id="swim2button" 
+			<input type="button" value="2 Swimmers" id="swim2button" 
 				onclick="setNumberOfSwimmers(2)" disabled />
 		</div>
 		<div class="span3" id="swim3">
-			<input type="button" value="Three Swimmers" id="swim3button" 
+			<input type="button" value="3 Swimmers" id="swim3button" 
 				onclick="setNumberOfSwimmers(3)" />
 		</div>
 		<div class="span3" id="swimk">
-			<input type="button" value="k Swimmers" id="swimkbutton" 
-				onclick="setNumberOfSwimmers(k)" disabled />
+			<input type="button" value="k Swimmers" id="swimkbutton" class="swimmerbutton"
+				onclick="setNumberOfSwimmers('k')" disabled />
 		</div>
 	</div>
 </div>
