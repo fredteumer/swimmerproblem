@@ -63,8 +63,6 @@ function init(){
 	
 }
 
-function findIntersection(l1, l2){}
-
 function Distance_Formula(x1, y1, x2, y2){
 	var d = Math.sqrt(Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2));
 	return d;
@@ -99,7 +97,8 @@ function drawTangent(x,y){
 		x1: x, y1: y,
 		x2: l[0].x+c_x, y2: l[0].y+c_y,
 		x3: l[0].x+c_x, y3: l[0].y+c_y,
-		name: "T1"
+		name: "T1",
+		group: "swimmers3"
 	});
 	
 	canvas.drawLine({
@@ -109,20 +108,38 @@ function drawTangent(x,y){
 		x1: x, y1: y,
 		x2: l[1].x+c_x, y2: l[1].y+c_y,
 		x3: l[1].x+c_x, y3: l[1].y+c_y,
-		name: "T2"
+		name: "T2",
+		group: "swimmers3"
 	});
 	
 	extendTangent(canvas.getLayer("T1"), canvas.getLayer("T2"));
 	
+	//canvas.getLayer("p").dragstop = function{ updateTangent(x, y); }
+	
 }
 
 function extendTangent(T1, T2){
+	var m1 = (T1.y2 - T1.y1) / (T1.x2 - T1.x1);
+	var m2 = (T2.y2 - T2.y1) / (T2.x2 - T2.x1);
+	
 	var y_bot = canvas.getLayer("l").y1;
 	T1.y3 = y_bot;
 	T2.y3 = y_bot;
 	
-	T1.x3 = T1.x2+(T1.x2-T1.x1);
-	T2.x3 = (((y_bot-T2.y2)(T2.x2-T2.x1)) / (T2.y2 - T2.y1)) + T2.x2
+	T1.x3 = ((y_bot-T1.y2)/m1) + T1.x2;
+	T2.x3 = ((y_bot-T2.y2)/m2) + T2.x2;
+}
+
+function getAngle(L1, L2){
+	var dy1 = L1.y1 - L1.y2;
+	var dx1 = L1.x1 - L1.x2;
+	var dy2 = L2.y1 - L2.y2;
+	var dx2 = L2.x1 - L2.x2;
+	
+	var angle1 = Math.atan2(dy1, dx1);
+	var angle2 = Math.atan2(dy2, dx2);
+	var angle = Math.abs(angle1-angle2);
+	return angle;
 }
 
 function setNumberOfSwimmers(numberOfSwimmers){
@@ -134,19 +151,17 @@ function setNumberOfSwimmers(numberOfSwimmers){
 }
 
 function beginOneSwimmer(){
-	alert('in 1 swimmer case! -- not finished yet!');
-}
-
-function beginTwoSwimmers(){
-	alert('in 2 swimmer case! -- not finished yet!');
-}
-
-function beginThreeSwimmers(){
 	
-	$('#swim1button').attr('disabled', true);
+	$('#swim1button').attr('value', 'RESET');
+	$('#swim1button').attr('disabled', false);
 	$('#swim2button').attr('disabled', true);
-	$('#swim3button').attr('disabled', true);
+	$('#swim3button').attr('disabled', false);
 	$('#swimkbutton').attr('disabled', true);
+	
+	canvas.removeLayerGroup("swimmers1");
+	canvas.removeLayerGroup("swimmers2");
+	canvas.removeLayerGroup("swimmers3");
+	canvas.removeLayerGroup("swimmersk");
 	
 	$('#info').html("<p>In the case of 3 swimmers, each must cover an arc of the circle.</p> \
 		<p>Each swimmer has a color: <span class=\'red\'>Swimmer 1</span> is \
@@ -155,7 +170,8 @@ function beginThreeSwimmers(){
 		<span class=\'grn\'>GREEN</span>.</p> \
 		<p>The <span class=\'oj\'>ORANGE</span> point at the top can be dragged to designate \
 		the two tangents, T1 and T2.</p> \
-		<p>Try it out and see what is the optimal configuration for the three swimmers!</p>");
+		<p>Drag the orange point to the desired location and press \
+		<span class=\'grn\'>GO</span> when ready.</p>");
 		
 	canvas.drawArc({
 		layer: true,
@@ -164,12 +180,71 @@ function beginThreeSwimmers(){
 		fillStyle: "orange",
 		x: 240, y: 200,
 		radius: 7,
-		name: "p"
+		name: "p",
+		group: "swimmers1"
 	});
 	
-	drawTangent(canvas.getLayer("p").x, canvas.getLayer("p").y);
+	$('#GObutton').attr('onclick', 'go1Swimmer(canvas.getLayer("p").x, canvas.getLayer("p").y)');
+}
+
+function beginTwoSwimmers(){
+	alert('in 2 swimmer case! -- not finished yet!');
+}
+
+function beginThreeSwimmers(){
+	
+	$('#swim1button').attr('disabled', false);
+	$('#swim2button').attr('disabled', true);
+	$('#swim3button').attr('value', 'RESET');
+	$('#swim3button').attr('disabled', false);
+	$('#swimkbutton').attr('disabled', true);
+	
+	canvas.removeLayerGroup("swimmers1");
+	canvas.removeLayerGroup("swimmers2");
+	canvas.removeLayerGroup("swimmers3");
+	canvas.removeLayerGroup("swimmersk");
+	
+	$('#info').html("<p>In the case of 3 swimmers, each must cover an arc of the circle.</p> \
+		<p>Each swimmer has a color: <span class=\'red\'>Swimmer 1</span> is \
+		<span class=\'red\'>RED</span>, <span class=\'blu\'>Swimmer 2</span> is \
+		<span class=\'blu\'>BLUE</span>, and <span class=\'grn\'>Swimmer 3</span> is \
+		<span class=\'grn\'>GREEN</span>.</p> \
+		<p>The <span class=\'oj\'>ORANGE</span> point at the top can be dragged to designate \
+		the two tangents, T1 and T2.</p> \
+		<p>Drag the orange point to the desired location and press \
+		<span class=\'grn\'>GO</span> when ready.</p>");
+		
+	canvas.drawArc({
+		layer: true,
+		draggable: true,
+		cursor: "pointer",
+		fillStyle: "orange",
+		x: 240, y: 200,
+		radius: 7,
+		name: "p",
+		group: "swimmers3"
+	});
+	
+	$('#GObutton').attr('onclick', 'go3Swimmers(canvas.getLayer("p").x, canvas.getLayer("p").y)');
 }
 
 function beginkSwimmers(){
 	alert('in k swimmer case! -- not finished yet!');
 }
+
+function go3Swimmers(p_x, p_y){
+	drawTangent(p_x, p_y);
+	draw3SwimmerPath();
+}
+
+function draw3SwimmerPath(){
+	var theta1, theta2, theta3;
+	theta1 = getAngle(canvas.getLayer("T1"), canvas.getLayer("T2"));
+	theta2 = getAngle(canvas.getLayer("T1"), canvas.getLayer("l"));
+	theta3 = getAngle(canvas.getLayer("T2"), canvas.getLayer("l"));
+}
+
+
+
+
+
