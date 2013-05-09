@@ -35,11 +35,11 @@
 }
 
 #godiv{
-	position: relative;
-	left: 200px;;
-	background-color: green;
+	margin-left: 250px;
+	margin-bottom: 40px;
+}
+
+#GObutton{
 	color: white;
-	text-align: center;
-	margin-bottom: 3%;
-	cursor: pointer;
+	background-color: green;
 }

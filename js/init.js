@@ -13,6 +13,7 @@ var C_radius = 50;
 function init(){
 	canvas.drawArc({
 		layer: true,
+		group: "base",
 		strokeStyle: "#000",
 		strokeWidth: 1.5,
 		x: 240, y: 320,
@@ -22,6 +23,7 @@ function init(){
 	
 	canvas.drawArc({
 		layer: true,
+		group: "base",
 		fillStyle: "#000",
 		x: 240, y: 320,
 		radius: 2,
@@ -30,6 +32,7 @@ function init(){
 	
 	canvas.drawText({
 		layer: true,
+		group: "base",
 		fillStyle: "#000",
 		strokeStyle: "#000",
 		strokeWidth: .25,
@@ -42,6 +45,7 @@ function init(){
 	
 	canvas.drawLine({
 		layer: true,
+		group: "base",
 		strokeStyle: "#000",
 		strokeWidth: 1.5,
 		x1: 0, y1: 370,
@@ -51,6 +55,7 @@ function init(){
 	
 	canvas.drawText({
 		layer: true,
+		group: "base",
 		fillStyle: "#000",
 		strokeStyle: "#000",
 		strokeWidth: .25,
@@ -153,9 +158,10 @@ function setNumberOfSwimmers(numberOfSwimmers){
 function beginOneSwimmer(){
 	
 	$('#swim1button').attr('value', 'RESET');
-	$('#swim1button').attr('disabled', false);
+	$('#swim1button').attr('disabled', true);
 	$('#swim2button').attr('disabled', true);
 	$('#swim3button').attr('disabled', false);
+	$('#swim3button').attr('value', '3 Swimmers');
 	$('#swimkbutton').attr('disabled', true);
 	
 	canvas.removeLayerGroup("swimmers1");
@@ -163,15 +169,12 @@ function beginOneSwimmer(){
 	canvas.removeLayerGroup("swimmers3");
 	canvas.removeLayerGroup("swimmersk");
 	
-	$('#info').html("<p>In the case of 3 swimmers, each must cover an arc of the circle.</p> \
-		<p>Each swimmer has a color: <span class=\'red\'>Swimmer 1</span> is \
-		<span class=\'red\'>RED</span>, <span class=\'blu\'>Swimmer 2</span> is \
-		<span class=\'blu\'>BLUE</span>, and <span class=\'grn\'>Swimmer 3</span> is \
-		<span class=\'grn\'>GREEN</span>.</p> \
-		<p>The <span class=\'oj\'>ORANGE</span> point at the top can be dragged to designate \
-		the two tangents, T1 and T2.</p> \
-		<p>Drag the orange point to the desired location and press \
-		<span class=\'grn\'>GO</span> when ready.</p>");
+	$('#info').html("<p>In the one swimmer case, shown in <span class=\'red\'>RED</span>, it is \
+	obvious to the casual observer that the best path home is directly to shore. Since the swimmer \
+	is unable to see which direction shore is, however, the path could be close to the entire \
+	circumference!</p> \
+	<p>Drag the <span class=\'oj\'>ORANGE</span> point to the desired location for the swimmer to \
+	swim towards and see how far it takes him to get home!</p>");
 		
 	canvas.drawArc({
 		layer: true,
@@ -193,7 +196,7 @@ function beginTwoSwimmers(){
 
 function beginThreeSwimmers(){
 	
-	$('#swim1button').attr('disabled', false);
+	$('#swim1button').attr('disabled', true);
 	$('#swim2button').attr('disabled', true);
 	$('#swim3button').attr('value', 'RESET');
 	$('#swim3button').attr('disabled', false);
@@ -242,6 +245,19 @@ function draw3SwimmerPath(){
 	theta1 = getAngle(canvas.getLayer("T1"), canvas.getLayer("T2"));
 	theta2 = getAngle(canvas.getLayer("T1"), canvas.getLayer("l"));
 	theta3 = getAngle(canvas.getLayer("T2"), canvas.getLayer("l"));
+}
+
+function drawSwimmerPath(theta, T1, T2){
+	if(theta > (Math.PI/3)){
+		
+	}
+	else if(theta >= (Math.PI/6) && theta <= (Math.PI/3)){
+		
+	}
+	else if(theta < (Math.PI/6){
+		
+	}
+	else{ alert('something bad happened! the angle is not right!'); }
 }
 
 
