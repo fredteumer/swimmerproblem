@@ -50,6 +50,8 @@ function init(){
 		strokeWidth: 1.5,
 		x1: 0, y1: 370,
 		x2: 480, y2: 370,
+		x3: 0, y3: 370,
+		x4: 0, y3: 370,
 		name: "l"
 	});
 	
@@ -135,11 +137,11 @@ function extendTangent(T1, T2){
 	T2.x3 = ((y_bot-T2.y2)/m2) + T2.x2;
 }
 
-function getAngle(L1, L2){
-	var dy1 = L1.y1 - L1.y2;
-	var dx1 = L1.x1 - L1.x2;
-	var dy2 = L2.y1 - L2.y2;
-	var dx2 = L2.x1 - L2.x2;
+function getAngle(L1_x1, L1_x2, L1_y1, L1_y2, L2_x1, L2_x2, L2_y1, L2_y2){
+	var dy1 = L1_y1 - L1_y2;
+	var dx1 = L1_x1 - L1_x2;
+	var dy2 = L2_y1 - L2_y2;
+	var dx2 = L2_x1 - L2_x2;
 	
 	var angle1 = Math.atan2(dy1, dx1);
 	var angle2 = Math.atan2(dy2, dx2);
@@ -206,6 +208,7 @@ function beginThreeSwimmers(){
 	canvas.removeLayerGroup("swimmers2");
 	canvas.removeLayerGroup("swimmers3");
 	canvas.removeLayerGroup("swimmersk");
+	canvas.removeLayerGroup("path_grp");
 	
 	$('#info').html("<p>In the case of 3 swimmers, each must cover an arc of the circle.</p> \
 		<p>Each swimmer has a color: <span class=\'red\'>Swimmer 1</span> is \
@@ -237,28 +240,167 @@ function beginkSwimmers(){
 
 function go3Swimmers(p_x, p_y){
 	drawTangent(p_x, p_y);
+	canvas.getLayer("l").x3 = canvas.getLayer("T2").x3;
+	canvas.getLayer("l").x4 = canvas.getLayer("T1").x3;
 	draw3SwimmerPath();
 }
 
 function draw3SwimmerPath(){
-	var theta1, theta2, theta3;
-	theta1 = getAngle(canvas.getLayer("T1"), canvas.getLayer("T2"));
-	theta2 = getAngle(canvas.getLayer("T1"), canvas.getLayer("l"));
-	theta3 = getAngle(canvas.getLayer("T2"), canvas.getLayer("l"));
+	canvas.removeLayerGroup("path_grp");
+	drawSwimmerPath("red");
+	//drawSwimmerPath("grn");
+	//drawSwimmerPath("blu");
 }
 
-function drawSwimmerPath(theta, T1, T2){
-	if(theta > (Math.PI/3)){
-		
+function drawSwimmerPath(clr){ //clr is the color of the swimmer (r/b/g)
+	var red_apex = [canvas.getLayer("T1").x1, canvas.getLayer("T1").y1];
+	var red_theta = getAngle(canvas.getLayer("T1").x1, canvas.getLayer("T1").x2, 
+		canvas.getLayer("T1").y1, canvas.getLayer("T1").y2, canvas.getLayer("T2").x1,
+		canvas.getLayer("T2").x2, canvas.getLayer("T2").y1, canvas.getLayer("T2").y2);
+	
+	var blu_apex = [canvas.getLayer("T2").x3, canvas.getLayer("T2").y3];
+	var blu_theta = getAngle(canvas.getLayer("T2").x3, canvas.getLayer("T2").x1, 
+		canvas.getLayer("T2").y3, canvas.getLayer("T2").y1, canvas.getLayer("l").x3,
+		canvas.getLayer("l").x2, canvas.getLayer("l").y3, canvas.getLayer("l").y2);
+	
+	var grn_apex = [canvas.getLayer("T1").x3, canvas.getLayer("T1").y3];
+	var grn_theta = getAngle(canvas.getLayer("T1").x3, canvas.getLayer("T1").x1, 
+		canvas.getLayer("T1").y3, canvas.getLayer("T1").y1, canvas.getLayer("l").x4,
+		canvas.getLayer("l").x1, canvas.getLayer("l").y4, canvas.getLayer("l").y1);
+	
+	if(clr == "red"){
+		var theta = red_theta;
+		var apex = red_apex;
+		drawPath("red_path", "#FF0000", theta, apex, canvas.getLayer("T1"), canvas.getLayer("T2"));
 	}
-	else if(theta >= (Math.PI/6) && theta <= (Math.PI/3)){
-		
+	
+	
+	else if(clr == "grn"){
+		var theta = grn_theta;
+		var apex = grn_apex;
+		drawPath("grn_path", theta, apex, canvas.getLayer("l"), canvas.getLayer("T1"));
 	}
-	else if(theta < (Math.PI/6){
-		
+	
+	
+	else if(clr == "blu"){
+		var theta = blu_theta;
+		var apex = blu_apex;
+		drawPath("blu_path", theta, apex, canvas.getLayer("T2"), canvas.getLayer("l"));
 	}
-	else{ alert('something bad happened! the angle is not right!'); }
+	
+	
+	else{ alert('something bad happened! - the color is incorrect! -- IN drawSwimmerPath'); }
 }
+
+function drawPath(name, clr, theta, apex, T1, T2){
+	if(theta > (Math.PI/3)){
+		canvas.drawLine({
+			layer: true,
+			strokeStyle: clr,
+			strokeWidth: 1.5,
+			x1: c_x, y1: c_y,
+			x2: apex[0], y2: apex[1],
+			name: name,
+			group: "path_grp"
+		});
+	}
+	else if( (theta >= (Math.PI/6)) && (theta <= (Math.PI/3)) ){
+		alpha = Math.PI/2 - theta;
+		var m = getSlopeFromAngle(alpha, T1);
+		var intersection1 = getIntersection(c_x, c_y, m, T1);
+		var m2 = getSlopeFromAngle(Math.PI/2, T2);
+		var intersection2 = getIntersection(intersection1[0], intersection1[1], m2, T2);
+		
+		canvas.drawLine({
+			layer: true,
+			strokeStyle: clr,
+			strokeWidth: 1.5,
+			x1: c_x, y1: c_y,
+			x2: intersection1[0], y2: intersection1[1],
+			x3: intersection2[0], y3: intersection2[1],
+			name: name,
+			group: "path_grp"
+		});
+	}
+	else if(theta < (Math.PI/6)){
+		alpha = Math.PI/2 - theta;
+		var m = getSlopeFromAngle(alpha, T1);
+		var intersection_T1 = getIntersection(c_x, c_y, m, T1);
+		var m2 = getSlopeFromAngle(Math.PI/2, T2);
+		var intersection_T2 = getIntersection(intersection1[0], intersection1[1], m2, T2);
+		//var intersection3 = getCircleIntersections(intersection1[0], intersection1[1], m2, T2);
+		//now you have the point at which the line intersects the circle
+		//var m3 = -1/getSlope(T2); 
+		//this is the slope of the line from the opposite tangent that forms a 90 degree angle
+		//var intersection4 = getCircleIntersections(intersection2[0], intersection2[1], m3, T2);
+		
+		canvas.drawLine({
+			layer: true,
+			strokeStyle: clr,
+			strokeWidth: 1.5,
+			x1: c_x, y1: c_y,
+			x2: intersection_T1[0], y2: intersection_T1[1],
+			x3: intersection_T2[0], y3: intersection_T2[1],
+			name: name+"_seg1",
+			group: "path_grp"
+		});	
+		
+		/*canvas.drawLine({
+			layer: true,
+			strokeStyle: clr,
+			strokeWidth: 1.5,
+			x1: intersection4[1][0], y1: intersection4[1][1],
+			x2: intersection2[0], y2: intersection2[1],
+			name: name+"_seg2",
+			group: "path_grp"
+		});	*/
+	}
+	else{ alert('something bad happened! the angle is not right! -- IN drawPath'); }
+}
+
+function getSlope(T){
+	var dx = T.x2 - T.x1;
+	var dy = T.y2 - T.y1;
+	return dy/dx;
+}
+
+function getSlopeFromAngle(alpha, T){
+	var m2 = getSlope(T);
+	var m1 = (m2 + Math.tan(alpha))/(1-(Math.tan(alpha)*m2));
+	return m1;
+}
+
+function getB(m,x,y){
+	return y-(m*x);
+}
+
+function getIntersection(x, y, m, L){
+	var m2 = getSlope(L);
+	var b1 = getB(m,x,y);
+	var b2 = getB(m2,L.x1,L.y1);
+	
+	var x_ans = (b2-b1)/(m-m2);//-(L.x1-c_x);
+	var y_ans = ((m*x_ans)+b1);//-(L.y1-c_y);
+	
+	return [x_ans,y_ans];
+}
+
+function getCircleIntersections(x, y, m){
+	var b = getB(m,x,y);
+	var x1 = ((-b*m) + c_x + m*c_y + Math.sqrt(-Math.pow(b,2)+Math.pow(C_radius,2)+Math.pow(m,2)*Math.pow(C_radius,2)-(2*b*m*c_x)-Math.pow(m,2)*Math.pow(c_x,2)+2*b*c_y+2*m*c_x*c_y-Math.pow(c_y,2))/(1+Math.pow(m,2)));
+	var x2 = (-b*m + c_x + m*c_y - Math.sqrt(-Math.pow(b,2)+Math.pow(C_radius,2)+Math.pow(m,2)*Math.pow(C_radius,2)-2*b*m*c_x-Math.pow(m,2)*Math.pow(c_x,2)+2*b*c_y+2*m*c_x*c_y-Math.pow(c_y,2))/(1+Math.pow(m,2)));
+	var y1 = m*x1 +b;
+	var y2 = m*x2 +b;
+	return [[x1,y1],[x2,y2]];
+}
+
+function getCircleIntersections2(x,y,m){
+	var b = getB(m,x,y);
+	var A = Math.pow(m,2)+1;
+	var B = 2*(m*);
+	var C = ;
+}
+
 
 
 
