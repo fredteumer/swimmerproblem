@@ -355,13 +355,13 @@ function drawPath(name, clr, theta, apex, T1, T2){
 			group: "path_grp"
 		});
 		
-		canvas.drawArc({
+		$("canvas").drawArc({
 			layer: true,
 			strokeStyle: clr,
 			strokeWidth: 1.5,
 			x: c_x, y: c_y,
 			radius: C_radius,
-			start: 90, end: 180,
+			start: getArcAngle(intersection_C2[1][0], intersection_C2[1][1]), end: getArcAngle(intersection_C1[0][0], intersection_C1[0][1]),
 			name: name+"_arc",
 			group: "path_grp"
 		});
@@ -396,15 +396,6 @@ function getIntersection(x, y, m, L){
 	return [x_ans,y_ans];
 }
 
-/*function getCircleIntersections(x, y, m){
-	var b = getB(m,x,y);
-	var x1 = ((-b*m) + c_x + m*c_y + Math.sqrt(-Math.pow(b,2)+Math.pow(C_radius,2)+Math.pow(m,2)*Math.pow(C_radius,2)-(2*b*m*c_x)-Math.pow(m,2)*Math.pow(c_x,2)+2*b*c_y+2*m*c_x*c_y-Math.pow(c_y,2))/(1+Math.pow(m,2)));
-	var x2 = (-b*m + c_x + m*c_y - Math.sqrt(-Math.pow(b,2)+Math.pow(C_radius,2)+Math.pow(m,2)*Math.pow(C_radius,2)-2*b*m*c_x-Math.pow(m,2)*Math.pow(c_x,2)+2*b*c_y+2*m*c_x*c_y-Math.pow(c_y,2))/(1+Math.pow(m,2)));
-	var y1 = m*x1 +b;
-	var y2 = m*x2 +b;
-	return [[x1,y1],[x2,y2]];
-}*/
-
 function getCircleIntersections(x,y,m){
 	var b = getB(m,x,y);
 	var A = Math.pow(m,2)+1;
@@ -420,6 +411,11 @@ function getCircleIntersections(x,y,m){
 	return [[x_ans1,y_ans1],[x_ans2,y_ans2]];
 }
 
+function getArcAngle(x,y) {
+    var p0 = {x: c_x, y: c_y - Math.sqrt(Math.abs(x - c_x) * Math.abs(x - c_x)
+            + Math.abs(y - c_y) * Math.abs(y - c_y))};
+    return (2 * Math.atan2(y - p0.y, x - p0.x)) *180/Math.PI;
+}
 
 
 
