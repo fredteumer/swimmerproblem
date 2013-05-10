@@ -327,12 +327,12 @@ function drawPath(name, clr, theta, apex, T1, T2){
 		var m = getSlopeFromAngle(alpha, T1);
 		var intersection_T1 = getIntersection(c_x, c_y, m, T1);
 		var m2 = getSlopeFromAngle(Math.PI/2, T2);
-		var intersection_T2 = getIntersection(intersection1[0], intersection1[1], m2, T2);
-		//var intersection3 = getCircleIntersections(intersection1[0], intersection1[1], m2, T2);
+		var intersection_T2 = getIntersection(intersection_T1[0], intersection_T1[1], m2, T2);
+		var intersection_C1 = getCircleIntersections(intersection_T1[0], intersection_T1[1], m2, T2);
 		//now you have the point at which the line intersects the circle
-		//var m3 = -1/getSlope(T2); 
+		var m3 = -1/getSlope(T2); 
 		//this is the slope of the line from the opposite tangent that forms a 90 degree angle
-		//var intersection4 = getCircleIntersections(intersection2[0], intersection2[1], m3, T2);
+		var intersection_C2 = getCircleIntersections(intersection_T2[0], intersection_T2[1], m3, T2);
 		
 		canvas.drawLine({
 			layer: true,
@@ -340,20 +340,31 @@ function drawPath(name, clr, theta, apex, T1, T2){
 			strokeWidth: 1.5,
 			x1: c_x, y1: c_y,
 			x2: intersection_T1[0], y2: intersection_T1[1],
-			x3: intersection_T2[0], y3: intersection_T2[1],
+			x3: intersection_C1[0][0], y3: intersection_C1[0][1],
 			name: name+"_seg1",
 			group: "path_grp"
 		});	
 		
-		/*canvas.drawLine({
+		canvas.drawLine({
 			layer: true,
 			strokeStyle: clr,
 			strokeWidth: 1.5,
-			x1: intersection4[1][0], y1: intersection4[1][1],
-			x2: intersection2[0], y2: intersection2[1],
+			x1: intersection_T2[0], y1: intersection_T2[1],
+			x2: intersection_C2[1][0], y2: intersection_C2[1][1],
 			name: name+"_seg2",
 			group: "path_grp"
-		});	*/
+		});
+		
+		canvas.drawArc({
+			layer: true,
+			strokeStyle: clr,
+			strokeWidth: 1.5,
+			x: c_x, y: c_y,
+			radius: C_radius,
+			start: 90, end: 180,
+			name: name+"_arc",
+			group: "path_grp"
+		});
 	}
 	else{ alert('something bad happened! the angle is not right! -- IN drawPath'); }
 }
@@ -379,26 +390,34 @@ function getIntersection(x, y, m, L){
 	var b1 = getB(m,x,y);
 	var b2 = getB(m2,L.x1,L.y1);
 	
-	var x_ans = (b2-b1)/(m-m2);//-(L.x1-c_x);
-	var y_ans = ((m*x_ans)+b1);//-(L.y1-c_y);
+	var x_ans = (b2-b1)/(m-m2);
+	var y_ans = ((m*x_ans)+b1);
 	
 	return [x_ans,y_ans];
 }
 
-function getCircleIntersections(x, y, m){
+/*function getCircleIntersections(x, y, m){
 	var b = getB(m,x,y);
 	var x1 = ((-b*m) + c_x + m*c_y + Math.sqrt(-Math.pow(b,2)+Math.pow(C_radius,2)+Math.pow(m,2)*Math.pow(C_radius,2)-(2*b*m*c_x)-Math.pow(m,2)*Math.pow(c_x,2)+2*b*c_y+2*m*c_x*c_y-Math.pow(c_y,2))/(1+Math.pow(m,2)));
 	var x2 = (-b*m + c_x + m*c_y - Math.sqrt(-Math.pow(b,2)+Math.pow(C_radius,2)+Math.pow(m,2)*Math.pow(C_radius,2)-2*b*m*c_x-Math.pow(m,2)*Math.pow(c_x,2)+2*b*c_y+2*m*c_x*c_y-Math.pow(c_y,2))/(1+Math.pow(m,2)));
 	var y1 = m*x1 +b;
 	var y2 = m*x2 +b;
 	return [[x1,y1],[x2,y2]];
-}
+}*/
 
-function getCircleIntersections2(x,y,m){
+function getCircleIntersections(x,y,m){
 	var b = getB(m,x,y);
 	var A = Math.pow(m,2)+1;
-	var B = 2*(m*);
-	var C = ;
+	var B = 2*(m*b-m*c_y-c_x);
+	var C = Math.pow(c_y,2)-Math.pow(C_radius,2)+Math.pow(c_x,2)-2*b*c_y+Math.pow(b,2);
+	
+	var x_ans1 = (-B+Math.sqrt(Math.pow(B,2)-(4*A*C)))/(2*A);
+	var x_ans2 = (-B-Math.sqrt(Math.pow(B,2)-(4*A*C)))/(2*A);
+	
+	var y_ans1 = (m*x_ans1)+b;
+	var y_ans2 = (m*x_ans2)+b;
+	
+	return [[x_ans1,y_ans1],[x_ans2,y_ans2]];
 }
 
 
