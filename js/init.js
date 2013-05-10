@@ -242,6 +242,46 @@ function go3Swimmers(p_x, p_y){
 	drawTangent(p_x, p_y);
 	canvas.getLayer("l").x3 = canvas.getLayer("T2").x3;
 	canvas.getLayer("l").x4 = canvas.getLayer("T1").x3;
+	
+	canvas.drawText({
+		layer: true,
+		group: "swimmers3",
+		fillStyle: "#000",
+		strokeStyle: "#000",
+		strokeWidth: .25,
+		x: 50, y: 10,
+		fontSize: "8pt",
+		fontFamily: "Arial, sans-serif",
+		text: "Red Path Length:",
+		name: 'red_path_length_label'
+	});
+	
+	canvas.drawText({
+		layer: true,
+		group: "swimmers3",
+		fillStyle: "#000",
+		strokeStyle: "#000",
+		strokeWidth: .25,
+		x: 50, y: 25,
+		fontSize: "8pt",
+		fontFamily: "Arial, sans-serif",
+		text: "Blue Path Length:",
+		name: 'blu_path_length_label'
+	});
+	
+	canvas.drawText({
+		layer: true,
+		group: "swimmers3",
+		fillStyle: "#000",
+		strokeStyle: "#000",
+		strokeWidth: .25,
+		x: 55, y: 40,
+		fontSize: "8pt",
+		fontFamily: "Arial, sans-serif",
+		text: "Green Path Length:",
+		name: 'grn_path_length_label'
+	});
+	
 	draw3SwimmerPath();
 }
 
@@ -271,21 +311,61 @@ function drawSwimmerPath(clr){ //clr is the color of the swimmer (r/b/g)
 	if(clr == "red"){
 		var theta = red_theta;
 		var apex = red_apex;
-		drawPath("red_path", "#FF0000", theta, apex, canvas.getLayer("T1"), canvas.getLayer("T2"));
+		var p_l = drawPath("red_path", "#FF0000", theta, apex, canvas.getLayer("T1"), canvas.getLayer("T2"));
+		
+		canvas.drawText({
+			layer: true,
+			group: "swimmers3",
+			fillStyle: "#000",
+			strokeStyle: "#000",
+			strokeWidth: .25,
+			x: 150, y: 10,
+			fontSize: "8pt",
+			fontFamily: "Arial, sans-serif",
+			text: p_l.toString(),
+			name: 'red_path_length'
+		});
+		
 	}
 	
 	
 	else if(clr == "grn"){
 		var theta = grn_theta;
 		var apex = grn_apex;
-		drawPath("grn_path", "#00FF00", theta, apex, canvas.getLayer("l"), canvas.getLayer("T1"));
+		var p_l = drawPath("grn_path", "#00FF00", theta, apex, canvas.getLayer("l"), canvas.getLayer("T1"));
+		
+		canvas.drawText({
+			layer: true,
+			group: "swimmers3",
+			fillStyle: "#000",
+			strokeStyle: "#000",
+			strokeWidth: .25,
+			x: 160, y: 40,
+			fontSize: "8pt",
+			fontFamily: "Arial, sans-serif",
+			text: p_l.toString(),
+			name: 'grn_path_length'
+		});
 	}
 	
 	
 	else if(clr == "blu"){
 		var theta = blu_theta;
 		var apex = blu_apex;
-		drawPath("blu_path", "#0000FF", theta, apex, canvas.getLayer("T2"), canvas.getLayer("l"));
+		var p_l = drawPath("blu_path", "#0000FF", theta, apex, canvas.getLayer("T2"), canvas.getLayer("l"));
+		
+		canvas.drawText({
+			layer: true,
+			group: "swimmers3",
+			fillStyle: "#000",
+			strokeStyle: "#000",
+			strokeWidth: .25,
+			x: 150, y: 25,
+			fontSize: "8pt",
+			fontFamily: "Arial, sans-serif",
+			text: p_l.toString(),
+			name: 'blu_path_length'
+		});
 	}
 	
 	
@@ -303,6 +383,8 @@ function drawPath(name, clr, theta, apex, T1, T2){
 			name: name,
 			group: "path_grp"
 		});
+		
+		return Distance_Formula(c_x, c_y, apex[0], apex[1]);
 	}
 	else if( (theta >= (Math.PI/6)) && (theta < (Math.PI/3)) ){
 		alpha = Math.PI/2 - theta;
@@ -321,6 +403,8 @@ function drawPath(name, clr, theta, apex, T1, T2){
 			name: name,
 			group: "path_grp"
 		});
+		
+		return Distance_Formula(c_x, c_y, intersection1[0], intersection1[1]) + Distance_Formula(intersection1[0], intersection1[1], intersection2[0], intersection2[1]);
 	}
 	else if(theta < (Math.PI/6)){
 		alpha = Math.PI/2 - theta;
@@ -365,8 +449,13 @@ function drawPath(name, clr, theta, apex, T1, T2){
 			name: name+"_arc",
 			group: "path_grp"
 		});
+		
+		return Distance_Formula(c_x, c_y, intersection_T1[0], intersection_T1[1]) + Distance_Formula(intersection_T1[0], intersection_T1[1], intersection_C1[0][0], intersection_C1[0][1]) + Distance_Formula(intersection_T2[0], intersection_T2[1], intersection_C2[1][0], intersection_C2[1][1]) + getArcLength(getArcAngle(intersection_C2[1][0], intersection_C2[1][1]), getArcAngle(intersection_C1[0][0], intersection_C1[0][1]));
 	}
-	else{ alert('something bad happened! the angle is not right! -- IN drawPath'); }
+	else{ 
+		alert('something bad happened! the angle is not right! -- IN drawPath'); 
+		return 0;
+	}
 }
 
 function getSlope(T){
@@ -417,6 +506,10 @@ function getArcAngle(x,y) {
     return (2 * Math.atan2(y - p0.y, x - p0.x)) *180/Math.PI;
 }
 
+function getArcLength(alpha, beta){
+	var theta = alpha - beta;
+	return (theta/360)*2*Math.PI*C_radius;
+}
 
 
 
