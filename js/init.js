@@ -51,7 +51,7 @@ function init(){
 		x1: 0, y1: 370,
 		x2: 480, y2: 370,
 		x3: 0, y3: 370,
-		x4: 0, y3: 370,
+		x4: 0, y4: 370,
 		name: "l"
 	});
 	
@@ -248,8 +248,8 @@ function go3Swimmers(p_x, p_y){
 function draw3SwimmerPath(){
 	canvas.removeLayerGroup("path_grp");
 	drawSwimmerPath("red");
-	//drawSwimmerPath("grn");
-	//drawSwimmerPath("blu");
+	drawSwimmerPath("grn");
+	drawSwimmerPath("blu");
 }
 
 function drawSwimmerPath(clr){ //clr is the color of the swimmer (r/b/g)
@@ -278,14 +278,14 @@ function drawSwimmerPath(clr){ //clr is the color of the swimmer (r/b/g)
 	else if(clr == "grn"){
 		var theta = grn_theta;
 		var apex = grn_apex;
-		drawPath("grn_path", theta, apex, canvas.getLayer("l"), canvas.getLayer("T1"));
+		drawPath("grn_path", "#00FF00", theta, apex, canvas.getLayer("l"), canvas.getLayer("T1"));
 	}
 	
 	
 	else if(clr == "blu"){
 		var theta = blu_theta;
 		var apex = blu_apex;
-		drawPath("blu_path", theta, apex, canvas.getLayer("T2"), canvas.getLayer("l"));
+		drawPath("blu_path", "#0000FF", theta, apex, canvas.getLayer("T2"), canvas.getLayer("l"));
 	}
 	
 	
@@ -293,7 +293,7 @@ function drawSwimmerPath(clr){ //clr is the color of the swimmer (r/b/g)
 }
 
 function drawPath(name, clr, theta, apex, T1, T2){
-	if(theta > (Math.PI/3)){
+	if(theta >= (Math.PI/3)){
 		canvas.drawLine({
 			layer: true,
 			strokeStyle: clr,
@@ -304,7 +304,7 @@ function drawPath(name, clr, theta, apex, T1, T2){
 			group: "path_grp"
 		});
 	}
-	else if( (theta >= (Math.PI/6)) && (theta <= (Math.PI/3)) ){
+	else if( (theta >= (Math.PI/6)) && (theta < (Math.PI/3)) ){
 		alpha = Math.PI/2 - theta;
 		var m = getSlopeFromAngle(alpha, T1);
 		var intersection1 = getIntersection(c_x, c_y, m, T1);
