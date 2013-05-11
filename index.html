@@ -21,22 +21,6 @@
 <div id="content" class="row-fluid">
 	<div id="header" class="span12">The Swimmer Problem</div>
 	<div id="slideshow" class="span12"><a href="https://docs.google.com/presentation/d/1Up1yMRzzLh0zxIxeCTaceuw-NOkWu8QihDhIF8WALa4/">Introductory Slideshow</a></div>
-	<div id="canvasdiv" class="span12">
-		<canvas id="canvas" height="400" width="480">
-		If you can read this, you need to get a better browser. You can't even use HTML5 Canvas!
-		</canvas>
-			
-	</div>
-	<div id="godiv" class="span1">
-		<input type="button" value="GO" id="GObutton" 
-			onclick="alert('Please select number of swimmers first!')" />
-	</div>
-	<div id="info" class="span12">
-		<p>You are the center point c in the circle C above, lost a unit distance out at sea. </p>
-		<p>The beach is the line l, but there is a heavy fog -- you don't know which way the beach is!</p>
-		<p>You need to get to shore with the least amount of swimming as possible!</p>
-		<p>To begin, select how many swimmers are lost at sea.</p>
-	</div>
 	<div id="numswimmers" class="row-fluid">
 		<div class="span3" id="swim1">
 			<input type="button" value="1 Swimmer" id="swim1button" 
@@ -54,6 +38,22 @@
 			<input type="button" value="k Swimmers" id="swimkbutton" class="swimmerbutton"
 				onclick="setNumberOfSwimmers('k')" disabled />
 		</div>
+	</div>
+	<div id="canvasdiv" class="span12">
+		<canvas id="canvas" height="400" width="480">
+		If you can read this, you need to get a better browser. You can't even use HTML5 Canvas!
+		</canvas>
+			
+	</div>
+	<div id="godiv" class="span1">
+		<input type="button" value="GO" id="GObutton" 
+			onclick="alert('Please select number of swimmers first!')" />
+	</div>
+	<div id="info" class="span12">
+		<p>You are the center point c in the circle C above, lost a unit distance out at sea. </p>
+		<p>The beach is the line l, but there is a heavy fog -- you don't know which way the beach is!</p>
+		<p>You need to get to shore with the least amount of swimming as possible!</p>
+		<p>To begin, select how many swimmers are lost at sea.</p>
 	</div>
 </div>
 

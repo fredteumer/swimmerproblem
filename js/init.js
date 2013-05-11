@@ -441,6 +441,10 @@ function drawPath(name, clr, theta, apex, T1, T2){
 			group: "path_grp"
 		});	
 		
+		if(intersection_C2[1][1] > canvas.getLayer("l").y1){
+			intersection_C2[1][1] = canvas.getLayer("l").y1;
+		}
+		
 		canvas.drawLine({
 			layer: true,
 			strokeStyle: clr,
@@ -457,9 +461,9 @@ function drawPath(name, clr, theta, apex, T1, T2){
 			strokeWidth: 1.5,
 			x: c_x, y: c_y,
 			radius: C_radius,
-			start: getArcAngle(intersection_C2[1][0], intersection_C2[1][1]), end: getArcAngle(intersection_C1[0][0], intersection_C1[0][1]),
-			name: name+"_arc",
-			group: "path_grp"
+			start: getArcAngle(intersection_C2[1][0], intersection_C2[1][1]), end: 	getArcAngle(intersection_C1[0][0], intersection_C1[0][1]),
+				name: name+"_arc",
+				group: "path_grp"
 		});
 		
 		return Distance_Formula(c_x, c_y, intersection_T1[0], intersection_T1[1]) + Distance_Formula(intersection_T1[0], intersection_T1[1], intersection_C1[0][0], intersection_C1[0][1]) + Distance_Formula(intersection_T2[0], intersection_T2[1], intersection_C2[1][0], intersection_C2[1][1]) + getArcLength(getArcAngle(intersection_C2[1][0], intersection_C2[1][1]), getArcAngle(intersection_C1[0][0], intersection_C1[0][1]));
