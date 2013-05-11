@@ -401,6 +401,10 @@ function drawPath(name, clr, theta, apex, T1, T2){
 		var m2 = getSlopeFromAngle(Math.PI/2, T2);
 		var intersection2 = getIntersection(intersection1[0], intersection1[1], m2, T2);
 		
+		if(intersection2[1] > canvas.getLayer("l").y1){
+			intersection2[1] = canvas.getLayer("l").y1;
+		}
+		
 		canvas.drawLine({
 			layer: true,
 			strokeStyle: clr,
