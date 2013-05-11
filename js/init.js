@@ -239,6 +239,14 @@ function beginkSwimmers(){
 }
 
 function go3Swimmers(p_x, p_y){
+	
+	canvas.removeLayer("red_path_length_label");
+	canvas.removeLayer("blu_path_length_label");
+	canvas.removeLayer("grn_path_length_label");
+	canvas.removeLayer("red_path_length");
+	canvas.removeLayer("blu_path_length");
+	canvas.removeLayer("grn_path_length");
+
 	drawTangent(p_x, p_y);
 	canvas.getLayer("l").x3 = canvas.getLayer("T2").x3;
 	canvas.getLayer("l").x4 = canvas.getLayer("T1").x3;
